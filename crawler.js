@@ -42,6 +42,8 @@ class Crawler {
             if(phonetic){
                 entry.phonetic = phonetic.childNodes[0].data;
             }
+            entry.pronunciations = $(".pronSection.etym .pron .pronunciations a audio").attr('src');
+
             entry.meaning = {};
             var start  = array[i];
             var end = array[i + 1];
