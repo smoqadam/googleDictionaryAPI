@@ -64,14 +64,15 @@ class Crawler {
                                            });
                                            
                             var newDefinition = {};
-                            if(definition.length > 0)
+                            if(definition.length > 0) {
                                 newDefinition.definition = definition;
-                                                                       
-                            if(example.length > 0)
+                            }                
+                            if(example.length > 0) {
                                 newDefinition.example = example.substring(1, example.length - 1);
-                            
-                            if(synonyms.length > 0)
+                            }
+                            if(synonyms.length > 0) {
                                 newDefinition.synonyms = synonyms;
+                            }
                             meaningArray.push(newDefinition);
 
                             $(item).find('> ol').find('li').each(function(i, elm){
@@ -80,6 +81,11 @@ class Crawler {
                                     subSense.definition = $(elm).find('> span.ind').text();
                                     subSense.example = $(elm).find('> div.trg div.exg div.ex em').text();
                                     subSense.synonyms = $(elm).find('> div.trg div.synonyms div.exs').text().split(',');
+                                    var examples = [];
+                                    $(elm).find('> div.trg div.examples div.exg ul li.ex').each(function(index, li) {
+                                        examples.push($(li).find('em').text());
+                                    })
+                                    subSense.examples = examples;
                                     meaningArray.push(subSense);
                                 }
                             })

@@ -11,13 +11,13 @@ app.get("/", function(req, res){
    if(!req.query.define){
        res.sendFile(path.join(__dirname+'/views//index.html'));
    }  else {
-        if(encodeURIComponent(req.query.define).includes("%")){
-                 console.log("yes");
-                 res.header("Access-Control-Allow-Origin", "*");
-                 return res.status(404).sendFile(path.join(__dirname+'/views/404.html'));
+        let define = req.query.define;
+        // if multi word selected, just traslate the first one
+        if(encodeURIComponent(define).includes("%20")){
+            define = define.split('%20')[0];
         }
         
-        var url = 'https://en.oxforddictionaries.com/search?filter=noad&query=' + req.query.define;
+        var url = 'https://en.oxforddictionaries.com/search?filter=noad&query=' + define;
         url = encodeURI(url);
 
         request({
@@ -27,7 +27,6 @@ app.get("/", function(req, res){
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0"
         }
     }, function(err, response, body) {
-        
             if(err){
                 return console.error(err);
             }
@@ -38,11 +37,9 @@ app.get("/", function(req, res){
             res.header("Content-Type",'application/json');
             res.header("Access-Control-Allow-Origin", "*");
             res.send(JSON.stringify(dictionary, null, 4));
-            
         });
     }
 });
-
 
 app.listen(3000, process.env.IP, function(){
     console.log("I am listening...");
