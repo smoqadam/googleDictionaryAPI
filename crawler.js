@@ -60,7 +60,8 @@ class Crawler {
                                 definition = $(item).find(".crossReference").first().text();
                             }
                             var example = $(item).find(" > .exg  > .ex > em").first().text();
-                            var synonymsText = $(item).find(" > .synonyms > .exg  > .exs").first().text();
+                            var synonymsText = $(item).find(" > .synonyms > .exg  > strong.syn").text();
+                            synonymsText += $(item).find(" > .synonyms > .exg  > span.syn").first().text();
                             var synonyms = synonymsText.split(/,|;/).filter(synonym => synonym!= ' ' && synonym).map(function(item) {
                                              return item.trim();
                                            });
@@ -81,10 +82,10 @@ class Crawler {
                                 if ($(elm).find('> span.ind').text().length) {
                                     var subSense = {};
                                     subSense.definition = $(elm).find('> span.ind').text();
-                                    subSense.example = $(elm).find('> div.trg div.exg div.ex em').text();
-                                    subSense.synonyms = $(elm).find('> div.trg div.synonyms div.exs').text().split(',');
+                                    subSense.example = $(elm).find('> div.exg div.ex em').text();
+                                    subSense.synonyms = $(elm).find('> div.synonyms div.exg').text().split(',');
                                     var examples = [];
-                                    $(elm).find('> div.trg div.examples div.exg ul li.ex').each(function(index, li) {
+                                    $(elm).find('> div.examples div.exg ul li.ex').each(function(index, li) {
                                         examples.push($(li).find('em').text());
                                     })
                                     subSense.examples = examples;

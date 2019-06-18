@@ -17,7 +17,7 @@ app.get("/", function(req, res){
             define = define.split('%20')[0];
         }
         
-        var url = 'https://en.oxforddictionaries.com/search?filter=noad&query=' + define;
+        var url = 'https://www.lexico.com/en/definition/' + define;
         url = encodeURI(url);
 
         request({
