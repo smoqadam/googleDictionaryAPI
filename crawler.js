@@ -15,21 +15,21 @@ class Crawler {
             res.header("Access-Control-Allow-Origin", "*");
             return res.status(404).sendFile(path.join(__dirname+'/views/404.html'));
         }
-        
-        
+
+
         var dictionary = [];
 
         var i,j = 0;
 
         var entryHead = $(".entryHead.primary_homograph");
-        
+
         var array = [];
         var entriesOfFirstEntryHead = $("#" + entryHead[0].attribs.id + " ~ .gramb").length;
         for(i = 0; i < entryHead.length; i++){
             array[i]  =   entriesOfFirstEntryHead - $("#" + entryHead[i].attribs.id + " ~ .gramb").length;
         }
         array[i] = entriesOfFirstEntryHead;
-        
+
         var grambs = $("section.gramb");
 
         var numberOfentryGroup = array.length - 1;
@@ -42,7 +42,7 @@ class Crawler {
             if(phonetic){
                 entry.phonetic = phonetic.childNodes[0].data;
             }
-            entry.pronunciations = $(".pronSection.etym .pron .pronunciations a audio").attr('src');
+            entry.pron = $(".headwordAudio audio").attr('src');
 
             entry.meaning = {};
             var start  = array[i];
@@ -52,9 +52,9 @@ class Crawler {
                     $(grambs[j]).find(".semb").each(function(j, element){
                         var meaningArray = [];
                         $(element).find("> li").each(function(j, element){
-                            
+
                             var item = $(element).find("> .trg");
-                            
+
                             var definition = $(item).find(" > p > .ind").text();
                             if(definition.length  === 0){
                                 definition = $(item).find(".crossReference").first().text();
@@ -65,11 +65,11 @@ class Crawler {
                             var synonyms = synonymsText.split(/,|;/).filter(synonym => synonym!= ' ' && synonym).map(function(item) {
                                              return item.trim();
                                            });
-                                           
+
                             var newDefinition = {};
                             if(definition.length > 0) {
                                 newDefinition.definition = definition;
-                            }                
+                            }
                             if(example.length > 0) {
                                 newDefinition.example = example.substring(1, example.length - 1);
                             }
@@ -92,13 +92,13 @@ class Crawler {
                                     meaningArray.push(subSense);
                                 }
                             })
-                        });                           
+                        });
                         if(partofspeech.length === 0)
                             partofspeech = "crossReference";
-                            
+
                         entry.meaning[partofspeech] = meaningArray.slice();
                     });
-                        
+
             }
             dictionary.push(entry);
         }
